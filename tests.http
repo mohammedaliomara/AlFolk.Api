@@ -1,0 +1,219 @@
+@base_url = http://localhost:5000/api
+
+### 1. AUTHENTICATION
+# @name login
+POST {{base_url}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@alfolk.org",
+    "password": "123456"
+}
+
+### Store the token from login response
+@token = {{login.response.body.token}}
+
+# @name getMe
+GET {{base_url}}/auth/me
+Authorization: Bearer {{token}}
+
+# @name logout
+POST {{base_url}}/auth/logout
+Authorization: Bearer {{token}}
+
+# @name forgotPassword
+POST {{base_url}}/auth/forgot-password
+
+# @name resetPassword
+POST {{base_url}}/auth/reset-password
+
+
+### 2. ADMIN PROFILE
+# @name updateProfile
+PUT {{base_url}}/admin/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "firstName": "أحمد",
+    "lastName": "علي",
+    "email": "admin@alfolk.org",
+    "password": "NewPassword123",
+    "currentPassword": "123456"
+}
+
+
+### 3. PARENTS
+# @name getParents
+GET {{base_url}}/parents?search=&page=1&pageSize=10
+Authorization: Bearer {{token}}
+
+# @name createParent
+POST {{base_url}}/parents
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "محمد حسن",
+    "phone": "01011223344",
+    "children": ["ياسين", "مريم"]
+}
+
+# @name getParentDetail
+GET {{base_url}}/parents/1
+Authorization: Bearer {{token}}
+
+# @name updateParent
+PUT {{base_url}}/parents/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "محمد حسن علي",
+    "phone": "01011223344"
+}
+
+# @name deleteParent
+DELETE {{base_url}}/parents/1
+Authorization: Bearer {{token}}
+
+
+### 4. CHILDREN
+# @name getChildren
+GET {{base_url}}/children?search=&page=1&pageSize=10&skillFilter=all
+Authorization: Bearer {{token}}
+
+# @name createChild
+POST {{base_url}}/children
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "عمر خالد",
+    "age": 8,
+    "gender": "Male",
+    "nationalId": "12345678901234",
+    "parentId": "00000000-0000-0000-0000-000000000000"
+}
+
+# @name getChildDetail
+GET {{base_url}}/children/1
+Authorization: Bearer {{token}}
+
+# @name updateChild
+PUT {{base_url}}/children/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "عمر خالد المحسن",
+    "age": 9,
+    "gender": "Male",
+    "nationalId": "12345678901234",
+    "parentId": "00000000-0000-0000-0000-000000000000"
+}
+
+# @name deleteChild
+DELETE {{base_url}}/children/1
+Authorization: Bearer {{token}}
+
+
+### 5. CONTENT (PLAYLISTS & VIDEOS)
+# @name getPlaylists
+GET {{base_url}}/playlists?audience=all
+Authorization: Bearer {{token}}
+
+# @name createPlaylist
+POST {{base_url}}/playlists
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "تمارين الذاكرة",
+    "description": "قائمة تمارين لتنشيط الذاكرة",
+    "targetAudience": "kids"
+}
+
+# @name getPlaylistDetail
+GET {{base_url}}/playlists/1
+Authorization: Bearer {{token}}
+
+# @name updatePlaylist
+PUT {{base_url}}/playlists/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "تمارين الذاكرة البصرية",
+    "description": "وصف محدث",
+    "targetAudience": "kids"
+}
+
+# @name deletePlaylist
+DELETE {{base_url}}/playlists/1
+Authorization: Bearer {{token}}
+
+# @name addVideo
+POST {{base_url}}/playlists/1/videos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "لعبة البطاقات",
+    "link": "https://youtube.com/...",
+    "duration": "5 دقائق",
+    "sortOrder": 1
+}
+
+# @name updateVideo
+PUT {{base_url}}/playlists/1/videos/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "لعبة البطاقات الملونة",
+    "link": "https://youtube.com/...",
+    "sortOrder": 1
+}
+
+# @name deleteVideo
+DELETE {{base_url}}/playlists/1/videos/1
+Authorization: Bearer {{token}}
+
+
+### 6. ANALYTICS
+# @name getDashboard
+GET {{base_url}}/analytics/dashboard
+Authorization: Bearer {{token}}
+
+# @name getTopKids
+GET {{base_url}}/analytics/top-kids?page=1&pageSize=5
+Authorization: Bearer {{token}}
+
+# @name getUsageTime
+GET {{base_url}}/analytics/usage-time?page=1&pageSize=10
+Authorization: Bearer {{token}}
+
+
+### 7. REPORTS
+# @name reportParents
+GET {{base_url}}/reports/parents
+Authorization: Bearer {{token}}
+
+# @name reportChildren
+GET {{base_url}}/reports/children
+Authorization: Bearer {{token}}
+
+# @name reportUsage
+GET {{base_url}}/reports/usage-time
+Authorization: Bearer {{token}}
+
+
+### 8. SEARCH & LOGS
+# @name globalSearch
+GET {{base_url}}/search?q=محمد
+Authorization: Bearer {{token}}
+
+# @name getActivityLogs
+GET {{base_url}}/activitylog?page=1&pageSize=20
+Authorization: Bearer {{token}}
